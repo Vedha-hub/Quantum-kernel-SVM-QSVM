@@ -1,0 +1,10 @@
+qiskit>=1.2
+numpy
+scikit-learn
+pandas
+matplotlib
+fastapi
+uvicorn[standard]
+pydantic>=2
+pytest
+httpx

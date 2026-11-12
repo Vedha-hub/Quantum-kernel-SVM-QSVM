@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Results: keep the folder, ignore generated history
+results/runs.jsonl
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,93 @@
+:root {
+  --ink: #16192c;
+  --muted: #4e566e;
+  --canvas: #eef1f6;
+  --panel: #ffffff;
+  --line: #cbd3e1;
+  --quantum: #5b3fd9;
+  --classical: #0f7f72;
+  --linear: #8a93a8;
+  --danger: #b4321f;
+  font-size: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #eceef7; --muted: #aab2c8; --canvas: #12142a; --panel: #1b1e3a;
+    --line: #34385c; --quantum: #9a86ff; --classical: #45c9b8; --linear: #8a93a8; --danger: #ff8c78;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--canvas); color: var(--ink);
+  font-family: "Source Sans 3", system-ui, sans-serif; line-height: 1.55;
+}
+h1, h2 { font-family: "Sora", system-ui, sans-serif; margin: 0; }
+h1 { font-size: 2.1rem; }
+h2 { font-size: 1.15rem; margin-bottom: 0.9rem; }
+
+.top { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 1rem; }
+.top p { margin: 0.4rem 0 0; color: var(--muted); max-width: 60ch; font-size: 1.05rem; }
+
+.layout {
+  max-width: 1200px; margin: 0 auto; padding: 1rem 1.25rem 3rem;
+  display: grid; grid-template-columns: 320px 1fr; gap: 1.25rem; align-items: start;
+}
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .controls { position: static !important; } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+.controls { position: sticky; top: 1rem; }
+
+label { display: block; font-weight: 600; margin: 1rem 0 0.3rem; }
+select, input[type="range"] { width: 100%; }
+select {
+  font: inherit; padding: 0.55rem 0.6rem; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+}
+input[type="range"] { accent-color: var(--quantum); }
+.hint { margin: 0.3rem 0 0; font-size: 0.9rem; color: var(--muted); }
+.hint.wide { max-width: 70ch; }
+
+.buttons { display: grid; gap: 0.6rem; margin-top: 1.5rem; }
+button {
+  font: inherit; font-weight: 600; padding: 0.7rem 1rem; border-radius: 6px; cursor: pointer;
+  border: 2px solid var(--quantum);
+}
+button.primary { background: var(--quantum); color: #fff; }
+button.secondary { background: transparent; color: var(--quantum); }
+button:disabled { opacity: 0.55; cursor: progress; }
+:focus-visible { outline: 3px solid var(--classical); outline-offset: 2px; }
+#status { min-height: 1.5rem; margin: 0.8rem 0 0; font-size: 0.95rem; }
+#status.error { color: var(--danger); font-weight: 600; }
+
+.empty p { color: var(--muted); max-width: 55ch; margin: 0; }
+
+/* Accuracy bars */
+.bar-row { display: grid; grid-template-columns: 150px 1fr 64px; align-items: center; gap: 0.8rem; margin: 0.7rem 0; }
+.bar-track { height: 26px; background: var(--canvas); border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s ease; }
+.bar-val { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.verdict { margin: 1rem 0 0; padding-top: 0.9rem; border-top: 1px solid var(--line); }
+
+/* Heatmap */
+.heat-wrap { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-top: 0.8rem; }
+#heat { width: min(480px, 100%); height: auto; aspect-ratio: 1; border: 1px solid var(--line); border-radius: 4px; image-rendering: pixelated; }
+.legend { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--muted); }
+.ramp { width: 22px; height: 150px; border-radius: 4px; background: linear-gradient(to bottom, var(--quantum), var(--canvas)); border: 1px solid var(--line); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { font-weight: 600; color: var(--muted); }
+td.best { font-weight: 700; color: var(--quantum); }
+
+.conf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; }
+.conf h3 { font-size: 1rem; margin: 0 0 0.5rem; }
+.conf table td { text-align: center; border: 1px solid var(--line); padding: 0.5rem; }
+
+pre { background: var(--canvas); border: 1px solid var(--line); border-radius: 6px; padding: 1rem; overflow-x: auto; font-size: 0.8rem; line-height: 1.25; margin: 0.6rem 0 0; }
+
+#sweep-chart svg { width: 100%; height: auto; margin: 0.5rem 0 1rem; }
+.chart-label { font-size: 12px; fill: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }

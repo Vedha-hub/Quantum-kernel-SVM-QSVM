@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QSVM Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>QSVM Lab</h1>
+    <p>Does a quantum kernel classify better than a classical one? Pick a dataset and a feature map, then find out.</p>
+  </header>
+
+  <main class="layout">
+    <aside class="panel controls" aria-label="Experiment settings">
+      <h2>Experiment settings</h2>
+
+      <label for="dataset">Dataset</label>
+      <select id="dataset"></select>
+      <p class="hint" id="dataset-hint"></p>
+
+      <label for="feature_map">Quantum feature map</label>
+      <select id="feature_map"></select>
+      <p class="hint" id="map-hint"></p>
+
+      <label for="n_qubits">Qubits: <output id="n_qubits_out">4</output></label>
+      <input type="range" id="n_qubits" min="2" max="8" value="4">
+      <p class="hint">One qubit per feature. The data is reduced with PCA to fit.</p>
+
+      <label for="reps">Circuit repeats: <output id="reps_out">2</output></label>
+      <input type="range" id="reps" min="1" max="4" value="2">
+
+      <label for="bandwidth">Bandwidth: <output id="bandwidth_out">0.5</output></label>
+      <input type="range" id="bandwidth" min="0.05" max="1.5" step="0.05" value="0.5">
+      <p class="hint">Scales the rotation angles. Large values often make the kernel useless.</p>
+
+      <label for="max_samples">Samples used: <output id="max_samples_out">120</output></label>
+      <input type="range" id="max_samples" min="40" max="300" step="10" value="120">
+
+      <label for="test_size">Test share: <output id="test_size_out">0.25</output></label>
+      <input type="range" id="test_size" min="0.1" max="0.4" step="0.05" value="0.25">
+
+      <div class="buttons">
+        <button id="run-btn" class="primary">Run experiment</button>
+        <button id="sweep-btn" class="secondary">Compare all feature maps</button>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+    </aside>
+
+    <section class="results" aria-label="Results">
+      <div id="empty" class="panel empty">
+        <h2>No results yet</h2>
+        <p>Choose your settings on the left and select <strong>Run experiment</strong>. A first run takes about a second.</p>
+      </div>
+
+      <div id="output" hidden>
+        <div class="panel">
+          <h2>Test accuracy</h2>
+          <div id="bars"></div>
+          <p id="verdict" class="verdict"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Quantum kernel matrix</h2>
+          <p class="hint wide">Each cell shows how similar two training samples look to the quantum circuit. Samples are sorted by class. A good kernel shows bright blocks along the diagonal.</p>
+          <div class="heat-wrap">
+            <canvas id="heat" width="480" height="480" aria-label="Kernel heatmap"></canvas>
+            <div class="legend"><span>1.0 similar</span><div class="ramp"></div><span>0.0 different</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>All metrics</h2>
+          <div class="table-wrap"><table id="metrics"></table></div>
+        </div>
+
+        <div class="panel">
+          <h2>Confusion matrices</h2>
+          <div id="confusions" class="conf-grid"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Feature map circuit</h2>
+          <p id="circuit-stats" class="hint wide"></p>
+          <pre id="diagram"></pre>
+        </div>
+      </div>
+
+      <div id="sweep-panel" class="panel" hidden>
+        <h2>Feature map comparison</h2>
+        <p class="hint wide" id="sweep-note"></p>
+        <div id="sweep-chart"></div>
+        <div class="table-wrap"><table id="sweep-table"></table></div>
+      </div>
+
+      <div class="panel">
+        <h2>Run history</h2>
+        <div class="table-wrap"><table id="history"></table></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
