@@ -52,9 +52,10 @@ def run_experiment(
     q_pred = qsvm.predict(K_test)
     q_fit_time = time.perf_counter() - t0
 
-    # Small heatmap: up to 40 train samples, sorted by class so blocks are visible
-    order = np.argsort(data.y_train, kind="stable")[:40]
-    heat = K_train[np.ix_(order, order)]
+    # Small heatmap: ~40 train samples, an equal number from EACH class, grouped by class
+    classes = np.unique(data.y_train)
+    per_class = max(1, 40 // len(classes))
+    order = np.concatenate([np.where(data.y_train == c)[0][:per_class] for c in classes])
 
     return {
         "config": {
